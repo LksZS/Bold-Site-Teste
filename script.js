@@ -1,7 +1,3 @@
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
 /**
  * Debounce function to limit how often a function can fire
  * @param {Function} func - Function to debounce
@@ -188,7 +184,18 @@ const updateScrollProgress = throttle(() => {
 // SMOOTH SCROLL FOR ANCHOR LINKS
 // ============================================
 
+/**
+ * Initialize smooth scroll for navigation links
+ * Accounts for fixed header height
+ */
 function initSmoothScroll() {
+    // Get header height for offset
+    const getHeaderHeight = () => {
+        const nav = document.querySelector('nav');
+        return nav ? nav.offsetHeight : 0;
+    };
+
+    // Handle all anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
@@ -200,22 +207,62 @@ function initSmoothScroll() {
             const target = document.querySelector(href);
             
             if (target) {
+                // Calculate position with header offset
+                const headerHeight = getHeaderHeight();
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                const offsetPosition = targetPosition - headerHeight - 20; // 20px extra padding
+                
                 // Respect user's motion preferences
                 const behavior = prefersReducedMotion() ? 'auto' : 'smooth';
                 
-                target.scrollIntoView({
-                    behavior: behavior,
-                    block: 'start'
+                // Smooth scroll to position
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: behavior
                 });
+                
+                // Close mobile menu if open
+                if (isMobile()) {
+                    setTimeout(() => closeMenu(), 300);
+                }
                 
                 // Update URL without jumping
                 if (history.pushState) {
                     history.pushState(null, null, href);
                 }
                 
-                // Set focus for accessibility
-                target.setAttribute('tabindex', '-1');
-                target.focus();
+                // Set focus for accessibility (after scroll completes)
+                setTimeout(() => {
+                    target.setAttribute('tabindex', '-1');
+                    target.focus({ preventScroll: true });
+                    target.removeAttribute('tabindex');
+                }, behavior === 'smooth' ? 800 : 0);
+            }
+        });
+    });
+    
+    // Also handle hero buttons specifically
+    const heroButtons = document.querySelectorAll('.hero-buttons a[href^="#"]');
+    heroButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href !== '#') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerHeight = getHeaderHeight();
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = targetPosition - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+                    });
+                    
+                    if (history.pushState) {
+                        history.pushState(null, null, href);
+                    }
+                }
             }
         });
     });

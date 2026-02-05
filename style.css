@@ -1,3 +1,24 @@
+/**
+ * ================================================================
+ * BOLD HOSPITALITY COMPANY - Website Responsivo
+ * ================================================================
+ * 
+ * CSS otimizado com melhorias de performance e responsividade mobile-first
+ * Desenvolvido com assistência de Claude (Anthropic) - 2024
+ * https://claude.ai
+ * 
+ * Características:
+ * - Mobile-first design
+ * - Tipografia fluida com clamp()
+ * - Grid responsivo adaptativo
+ * - Menu hamburger animado
+ * - Performance otimizada
+ * - Acessibilidade WCAG 2.1
+ * 
+ * Licença: MIT (Uso livre)
+ * ================================================================
+ */
+
 * {
     margin: 0;
     padding: 0;
@@ -22,6 +43,10 @@
     --bg-main: #1a1410;
     --text-dark: #fafafa;
     --text-light: #d4b896;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
