@@ -1,0 +1,36 @@
+{
+  "name": "bold-hospitality-site",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Bold Hospitality Company — site institucional (React + TypeScript + Vite + GSAP)",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "typecheck": "tsc -b --noEmit false --pretty",
+    "assets:optimize": "node scripts/optimize-assets.mjs",
+    "assets:video": "node scripts/optimize-video.mjs",
+    "dev:legacy": "vite --host 0.0.0.0 --port 5174"
+  },
+  "dependencies": {
+    "@fontsource-variable/caveat": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.27",
+    "motion": "^12.23.12",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "sharp": "^0.34.4",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~5.9.2",
+    "vite": "^7.1.5"
+  }
+}
