@@ -1,0 +1,698 @@
+/* ============================================================================
+   Bold Hospitality Company — design system
+   ----------------------------------------------------------------------------
+   1. Fonts (self-hosted)          5. Base / reset
+   2. Tailwind + theme tokens      6. Motion tokens & reveal system
+   3. Brand tokens                 7. Surfaces, textures, components
+   4. Type scale                   8. Reduced motion / transparency
+   ========================================================================== */
+
+/* 1 ── Fonts ---------------------------------------------------------------- */
+@import "@fontsource/poppins/latin-400.css";
+@import "@fontsource/poppins/latin-500.css";
+@import "@fontsource/poppins/latin-600.css";
+@import "@fontsource/poppins/latin-700.css";
+@import "@fontsource/poppins/latin-800.css";
+@import "@fontsource/poppins/latin-900.css";
+@import "@fontsource-variable/caveat/wght.css";
+
+/* 2 ── Tailwind + theme ----------------------------------------------------- */
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat Variable", "Caveat", ui-rounded, cursive;
+
+  /* Brand palette (preserved from the original stylesheet, organised into roles) */
+  --color-wine: #6e2828;
+  --color-wine-deep: #4f1c1c;
+  --color-wine-ink: #3a1414;
+  --color-rose: #8b5353;
+  --color-orange: #f09100;
+  --color-orange-bright: #ffb03a;
+  --color-orange-ink: #8c5100;
+  --color-paper: #fafafa;
+  --color-cream: #fff8f2;
+  --color-sand: #f2e6da;
+  --color-ink: #2a2a2a;
+  --color-ink-soft: #6a5c56;
+  --color-night: #241714;
+
+  --radius-card: 1.5rem;
+  --radius-frame: 2rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* 3 ── Brand tokens -------------------------------------------------------- */
+:root {
+  --wine: #6e2828;
+  --wine-deep: #4f1c1c;
+  --wine-ink: #3a1414;
+  --rose: #8b5353;
+  --orange: #f09100;
+  --orange-bright: #ffb03a;
+  --orange-ink: #8c5100;
+  --paper: #fafafa;
+  --cream: #fff8f2;
+  --sand: #f2e6da;
+  --ink: #2a2a2a;
+  --ink-soft: #6a5c56;
+  --night: #241714;
+
+  --hairline: color-mix(in oklab, var(--wine) 16%, transparent);
+  --hairline-strong: color-mix(in oklab, var(--wine) 32%, transparent);
+  --hairline-invert: color-mix(in oklab, #fff 22%, transparent);
+
+  --shadow-lift: 0 18px 40px -24px color-mix(in oklab, var(--wine-ink) 45%, transparent);
+  --shadow-float: 0 24px 60px -30px color-mix(in oklab, var(--wine-ink) 55%, transparent);
+
+  --gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --nav-h: 4.25rem;
+  --section-y: clamp(5rem, 11vh, 9.5rem);
+  --maxw: 88rem;
+
+  /* Paper grain — a single inline SVG, reused as a texture layer */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+
+  /* Arch motif — the recurring shape of the brand's interiors */
+  --arch: 14rem 14rem 0.75rem 0.75rem;
+}
+
+/* 4 ── Type scale ---------------------------------------------------------- */
+:root {
+  --step--1: clamp(0.8rem, 0.77rem + 0.15vw, 0.875rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.16vw, 1.05rem);
+  --step-1: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+  --step-2: clamp(1.45rem, 1.25rem + 1vw, 2rem);
+  --step-3: clamp(1.9rem, 1.5rem + 2vw, 3rem);
+  --step-4: clamp(2.4rem, 1.7rem + 3.4vw, 4.4rem);
+  --step-5: clamp(2.9rem, 1.7rem + 5.6vw, 6.4rem);
+  --step-mega: clamp(3.4rem, 1.4rem + 9vw, 10rem);
+}
+
+/* 5 ── Base ---------------------------------------------------------------- */
+@layer base {
+  /* Lenis drives scrolling; native smooth scroll would fight ScrollTrigger.refresh() */
+  html {
+    scroll-behavior: auto !important;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--step-0);
+    line-height: 1.65;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    text-wrap: balance;
+    color: var(--wine);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 0.25em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--orange-ink);
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--orange-bright);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--orange) 40%, transparent);
+    color: var(--wine-ink);
+  }
+
+  img,
+  video {
+    max-width: 100%;
+  }
+
+  /* Anchored sections clear the floating nav */
+  section[id] {
+    scroll-margin-top: calc(var(--nav-h) + 1rem);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+}
+
+/* 6 ── Motion tokens & reveal system --------------------------------------- */
+:root {
+  /* "Luxury slow" editorial preset, mirrored in src/lib/motion-tokens.ts */
+  --m-dur-ui: 160ms;
+  --m-dur-hover: 220ms;
+  --m-dur-reveal: 1.05s;
+  --m-ease-enter: var(--ease-out-expo);
+  --m-ease-move: var(--ease-in-out-quart);
+  --m-distance: 28px;
+  --m-stagger: 90ms;
+
+  --dur-press: 130ms;
+  --dur-hover: 240ms;
+  --dur-image: 900ms;
+}
+
+/* Elements marked for scroll reveal start hidden only when JS is running and
+   motion is allowed: no flash of animated content, no invisible page without JS. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js.motion-ready [data-reveal] {
+    opacity: 0;
+  }
+}
+
+/* Failsafe: if the animation layer never boots (script error, blocked bundle),
+   every reveal target is shown rather than leaving a hole in the page. */
+html.js:not(.motion-ready) [data-reveal] {
+  opacity: 1;
+}
+
+/* 7 ── Surfaces, textures, components ------------------------------------- */
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .section {
+    padding-block: var(--section-y);
+    position: relative;
+  }
+
+  .eyebrow {
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--orange-ink);
+  }
+
+  .on-dark .eyebrow {
+    color: var(--orange-bright);
+  }
+
+  .lead {
+    font-size: var(--step-1);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 58ch;
+  }
+
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .rule {
+    height: 1px;
+    background: var(--hairline);
+  }
+
+  .on-dark {
+    color: color-mix(in oklab, #fff 88%, var(--sand));
+  }
+
+  .on-dark h1,
+  .on-dark h2,
+  .on-dark h3,
+  .on-dark h4 {
+    color: #fff;
+  }
+
+  .on-dark .lead,
+  .on-dark p {
+    color: color-mix(in oklab, #fff 78%, var(--sand));
+  }
+
+  /* Paper grain: sits above flat fills, below content.
+     Composited with plain alpha (no mix-blend-mode): a soft-light blend over a
+     full viewport cost ~25% of the frame budget while scrolling in the audit, a
+     plain low-alpha overlay costs the same as painting the section once. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--noise);
+    background-size: 140px;
+    opacity: 0.075;
+    z-index: 1;
+  }
+
+  /* --- Buttons --------------------------------------------------------- */
+  .btn {
+    --btn-bg: var(--orange);
+    --btn-fg: #fff;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.95rem 1.65rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: var(--step-0);
+    line-height: 1;
+    text-decoration: none;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: 1px solid transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      scale var(--dur-press) var(--ease-out-expo),
+      color var(--dur-hover) ease,
+      border-color var(--dur-hover) ease,
+      background-color var(--dur-hover) ease;
+  }
+
+  .btn:active:not(:disabled, [aria-disabled="true"]) {
+    scale: 0.97;
+  }
+
+  .btn--ghost {
+    --btn-bg: transparent;
+    --btn-fg: var(--wine);
+    border-color: var(--hairline-strong);
+  }
+
+  .btn--onDark {
+    --btn-bg: transparent;
+    --btn-fg: #fff;
+    border-color: color-mix(in oklab, #fff 45%, transparent);
+  }
+
+  .btn--wine {
+    --btn-bg: var(--wine);
+  }
+
+  /* Fill sweep from the pointer's entry edge (WAAPI drives .btn__fill) */
+  .btn__fill {
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--wine-ink);
+    translate: -101% 0;
+  }
+
+  .btn--ghost .btn__fill {
+    background: var(--wine);
+  }
+
+  .btn--onDark .btn__fill {
+    background: #fff;
+  }
+
+  .btn:is(:hover, :focus-visible) {
+    --btn-fg: #fff;
+  }
+
+  .btn--onDark:is(:hover, :focus-visible) {
+    --btn-fg: var(--wine);
+  }
+
+  .btn__label {
+    position: relative;
+    transition: color var(--dur-hover) ease;
+  }
+
+  .icon-swap {
+    display: inline-grid;
+    overflow: hidden;
+  }
+
+  .icon-swap > svg {
+    grid-area: 1 / 1;
+    transition: translate 0.4s var(--ease-out-expo);
+  }
+
+  .icon-swap > svg:last-child {
+    translate: -150% 0;
+  }
+
+  /* --- Links ----------------------------------------------------------- */
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--wine);
+    text-decoration: none;
+    padding-block: 0.35rem;
+    border-bottom: 1px solid var(--hairline-strong);
+    transition: border-color var(--dur-hover) ease, color var(--dur-hover) ease;
+  }
+
+  .on-dark .link-arrow {
+    color: #fff;
+    border-bottom-color: var(--hairline-invert);
+  }
+
+  .link-arrow .icon-swap > svg {
+    width: 1.1em;
+    height: 1.1em;
+    transition: translate 0.4s var(--ease-out-expo);
+  }
+
+  .link-arrow .icon-swap > svg:first-child + svg {
+    translate: -170% 0;
+  }
+
+  .link-arrow .icon-swap > svg:first-child + svg + svg {
+    translate: 0 0;
+  }
+
+  /* --- Glass (nav, media controls, lightbox chrome only) --------------- */
+  .glass {
+    position: relative;
+    background: color-mix(in oklab, var(--wine-ink) 46%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid color-mix(in oklab, #fff 14%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, #fff 18%, transparent),
+      0 18px 40px -28px rgb(0 0 0 / 0.7);
+  }
+
+  .glass--light {
+    background: color-mix(in oklab, #fff 72%, transparent);
+    border-color: color-mix(in oklab, var(--wine) 12%, transparent);
+    box-shadow:
+      inset 0 1px 0 #fff,
+      0 18px 40px -30px color-mix(in oklab, var(--wine-ink) 55%, transparent);
+  }
+
+  /* --- Media frames ---------------------------------------------------- */
+  .frame {
+    position: relative;
+    overflow: clip;
+    border-radius: var(--radius-card);
+    background: var(--sand);
+    isolation: isolate;
+  }
+
+  .frame--arch {
+    border-radius: var(--arch);
+  }
+
+  .frame > img,
+  .frame > video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Slow zoom inside a fixed frame on hover — never scales the layout box */
+  .frame--zoom > img {
+    transition: scale var(--dur-image) var(--ease-out-expo);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .frame--zoom:hover > img {
+      scale: 1.045;
+    }
+  }
+
+  /* Eased scrim for text over photography */
+  .scrim::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      color-mix(in oklab, var(--wine-ink) 82%, transparent) 0%,
+      color-mix(in oklab, var(--wine-ink) 58%, transparent) 19%,
+      color-mix(in oklab, var(--wine-ink) 41%, transparent) 34%,
+      color-mix(in oklab, var(--wine-ink) 28%, transparent) 47%,
+      color-mix(in oklab, var(--wine-ink) 20%, transparent) 57%,
+      color-mix(in oklab, var(--wine-ink) 13%, transparent) 65%,
+      color-mix(in oklab, var(--wine-ink) 8%, transparent) 73%,
+      color-mix(in oklab, var(--wine-ink) 4%, transparent) 82%,
+      color-mix(in oklab, var(--wine-ink) 1%, transparent) 92%,
+      transparent 100%
+    );
+  }
+
+  /* --- Marquee --------------------------------------------------------- */
+  .marquee {
+    --gap: clamp(1.75rem, 4vw, 3.5rem);
+    overflow: clip;
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    inline-size: max-content;
+  }
+
+  .marquee__group {
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+    padding-inline-end: var(--gap);
+    margin: 0;
+    list-style: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee__track {
+      animation: marquee-scroll var(--duration, 46s) linear infinite;
+    }
+
+    .marquee:hover .marquee__track,
+    .marquee:focus-within .marquee__track {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes marquee-scroll {
+    to {
+      translate: -50% 0;
+    }
+  }
+
+  /* --- Index rows (brands, values) ------------------------------------- */
+  .row-index {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .row-index__item {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .row-index__link {
+    position: relative;
+    display: grid;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 2rem);
+    padding-block: clamp(1rem, 2.4vw, 1.6rem);
+    text-decoration: none;
+    color: inherit;
+    transition: opacity var(--dur-hover) ease;
+  }
+
+  .row-index__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: color-mix(in oklab, var(--orange) 12%, transparent);
+    scale: 0 1;
+    transform-origin: 0 50%;
+    transition: scale 0.55s var(--ease-out-expo);
+    z-index: -1;
+  }
+
+  /* --- Split text ------------------------------------------------------ */
+  /* Masks clip descenders (g, y, p) when line-height is tight: pad the mask,
+     then cancel the padding so the layout is unchanged. */
+  .line-mask {
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+
+  /* Split elements: kerning across the split boundary shifts glyphs. */
+  [data-split],
+  [data-split] .line {
+    font-kerning: none;
+    text-wrap: wrap;
+  }
+
+  /* --- Wordmark -------------------------------------------------------- */
+  .wordmark {
+    container-type: inline-size;
+    overflow: clip;
+  }
+
+  .wordmark__text {
+    display: block;
+    font-size: 25.5cqi; /* ~100 / (4 glyphs x 0.98em) — measured for BOLD in Poppins 900 */
+    font-weight: 900;
+    line-height: 0.78;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+    user-select: none;
+    translate: 0 14%;
+  }
+
+  /* --- Underline draw -------------------------------------------------- */
+  .underline-draw {
+    display: block;
+    width: 100%;
+    height: 0.5rem;
+    overflow: visible;
+  }
+
+  .underline-draw path {
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .row-index__link:hover::after,
+  .row-index__link:focus-visible::after {
+    scale: 1 1;
+  }
+
+  .btn--ghost:hover,
+  .btn--ghost:focus-visible {
+    border-color: var(--wine);
+  }
+
+  .nav-link:hover .icon-swap > svg:first-child,
+  .link-arrow:hover .icon-swap > svg:first-child {
+    translate: 170% 0;
+  }
+
+  .nav-link:hover .icon-swap > svg:first-child + svg,
+  .link-arrow:hover .icon-swap > svg:first-child + svg,
+  .link-arrow:hover .icon-swap > svg:first-child + svg + svg {
+    translate: 0 0;
+  }
+}
+
+/* 8 ── Reduced motion & transparency -------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Tier 2: keep the fact of a change, drop the travel */
+  .btn:active:not(:disabled, [aria-disabled="true"]) {
+    scale: 1;
+    filter: brightness(0.94);
+  }
+
+  .marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  .marquee__group[aria-hidden="true"] {
+    display: none;
+  }
+
+  :root {
+    --m-distance: 0px;
+    --m-stagger: 0ms;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .glass {
+    background: color-mix(in oklab, var(--wine-ink) 94%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass--light {
+    background: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .grain::after {
+    display: none;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: color-mix(in oklab, var(--wine-ink) 94%, transparent);
+  }
+
+  .glass--light {
+    background: #fff;
+  }
+}
+
+/* ── Skip link ─────────────────────────────────────────────────────────────
+   Deliberately unlayered: in the base layer the .btn component rule's
+   `position: relative` won and the link stayed in flow, pushing every section
+   down. Unlayered declarations beat all @layer rules. */
+.skip-link {
+  position: fixed;
+  inset-inline-start: max(1rem, env(safe-area-inset-left));
+  top: max(1rem, env(safe-area-inset-top));
+  z-index: 200;
+  translate: 0 -220%;
+  transition: translate 0.25s var(--ease-out-expo);
+}
+
+.skip-link:focus-visible {
+  translate: 0 0;
+}
